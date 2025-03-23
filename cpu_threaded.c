@@ -2891,7 +2891,7 @@ u8 function_cc *block_lookup_address_thumb(u32 pc)
 }                                                                             \
 
 #define MAX_BLOCK_SIZE 2048
-#define arm_MAX_BLOCK_SIZE 2048
+#define arm_MAX_BLOCK_SIZE 128
 #define thumb_MAX_BLOCK_SIZE 2048
 
 #define MAX_EXITS      256
