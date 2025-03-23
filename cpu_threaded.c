@@ -2504,7 +2504,7 @@ void translate_icache_sync() {
 #define UB_16		   0xFFFF
 #define UB_32		   0xFFFFFFFF
 
-#define VALID_TAG(tagn) (tagn > LAST_TAG_NUM)
+#define VALID_TAG(tagn) (tagn > LAST_TAG_NUM && tagn <= INITIAL_TOP_TAG)
 
 #define allocate_tag_arm(location) {   \
   location[0] = ram_block_tag;         \
