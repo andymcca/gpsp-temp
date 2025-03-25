@@ -2890,12 +2890,12 @@ u8 function_cc *block_lookup_address_thumb(u32 pc)
   }                                                                           \
 }                                                                             \
 
-#define MAX_BLOCK_SIZE 2048
-#define arm_MAX_BLOCK_SIZE 128
-#define thumb_MAX_BLOCK_SIZE 2048
+#define MAX_BLOCK_SIZE 8192
+#define arm_MAX_BLOCK_SIZE 8192
+#define thumb_MAX_BLOCK_SIZE 8192
 
 #define MAX_EXITS      256
-#define arm_MAX_EXITS      2
+#define arm_MAX_EXITS      256
 #define thumb_MAX_EXITS      256
 
 block_data_type block_data[MAX_BLOCK_SIZE];
@@ -2917,7 +2917,6 @@ block_data_type block_data[MAX_BLOCK_SIZE];
       CODE_TAG_BLOCK16;                                                       \
   }                                                                           \
 }
-
 #define smc_write_arm_no()                                                    \
 
 #define smc_write_thumb_no()                                                  \
@@ -3008,8 +3007,8 @@ static s32 BinarySearch(u32* Array, u32 Value, u32 Size)
   do                                                                          \
   {                                                                           \
     check_pc_region(block_end_pc);                                            \
-    smc_write_##type##_##smc_write_op();                                      \
     type##_load_opcode();                                                     \
+    smc_write_##type##_##smc_write_op();                                      \
     type##_flag_status();                                                     \
                                                                               \
     if(type##_exit_point)                                                     \
@@ -3545,6 +3544,73 @@ void flush_dynarec_caches(void)
   flush_translation_cache_ram();
 }
 
+void partial_flush_ram_full_dma(u32 address)
+{
+  u8 *smc_data;
+  u8 *ewram_smc_data = &ewram[0x40000];
+  u8 *iwram_smc_data = iwram;
+
+  // printf("SMC Data Address: %x \n", address);
+
+  switch (address >> 24)
+  {
+    case 0x02: /* EWRAM */
+      smc_data = ewram_smc_data + (address & 0x3FFFE);
+      break;
+    case 0x03: /* IWRAM */
+      smc_data = iwram_smc_data + (address & 0x7FFE);
+//      printf("SMC Data Address: %x \n", smc_data);
+      break;
+    default:   /* no smc_data */
+      return;
+  }
+
+  u8 *smc_data_area, *smc_data_area_end, *smc_data_right ;
+  smc_data_right = smc_data; // Save this pointer to go to the right later
+
+  switch (address >> 24)
+  {
+    case 0x02: /* EWRAM */
+      smc_data_area = ewram_smc_data;
+      smc_data_area_end = ewram_smc_data + 0x40000;
+      break;
+    case 0x03: /* IWRAM */
+      smc_data_area = iwram_smc_data;
+      smc_data_area_end = iwram_smc_data + 0x8000;
+      break;
+  }
+  
+  *((u16*) smc_data) = 0;
+
+  while (1)
+  {
+    smc_data = smc_data - 2;
+    if (smc_data < smc_data_area)
+      smc_data = smc_data_area_end - 2; // Wrap to the end
+    if (*((u16*) smc_data) != 0)
+      *((u16*) smc_data) = 0;
+    else 
+      {
+      //printf("Cleared from %x to %x \n", smc_data_right, smc_data);
+      break; }
+
+  }
+
+  smc_data = smc_data_right;
+
+  while (1)
+  {
+    smc_data = smc_data + 2;
+    if (smc_data == smc_data_area_end)
+      smc_data = smc_data_area; // Wrap to the beginning
+    if (*((u16*) smc_data) != 0)
+      *((u16*) smc_data) = 0;
+    else
+      break;
+  }
+
+}
+
 void partial_flush_ram_full(u32 address)
 {
   u8 *smc_data;
@@ -3586,7 +3652,7 @@ void partial_flush_ram_full(u32 address)
     smc_data = smc_data - 2;
     if (smc_data < smc_data_area)
       smc_data = smc_data_area_end - 2; // Wrap to the end
-    if (*((u16*) smc_data) != 0 && *((u16*) smc_data) != UB_16)
+    if (*((u16*) smc_data) != 0)
       *((u16*) smc_data) = 0;
     else 
       {
@@ -3602,112 +3668,10 @@ void partial_flush_ram_full(u32 address)
     smc_data = smc_data + 2;
     if (smc_data == smc_data_area_end)
       smc_data = smc_data_area; // Wrap to the beginning
-    if (*((u16*) smc_data) != 0 && *((u16*) smc_data) != UB_16)
+    if (*((u16*) smc_data) != 0)
       *((u16*) smc_data) = 0;
     else
-      if (*((u16*) smc_data) == UB_16)
-        *((u16*) smc_data) = 0;
       break;
   }
 
-}
-
-void partial_flush_ram_left(u32 address)
-{
-  u8 *smc_data;
-  u8 *ewram_smc_data = &ewram[0x40000];
-  u8 *iwram_smc_data = iwram;
-
-  switch (address >> 24)
-  {
-    case 0x02: /* EWRAM */
-      smc_data = ewram_smc_data + (address & 0x3FFFE);
-      break;
-    case 0x03: /* IWRAM */
-      smc_data = iwram_smc_data + (address & 0x7FFE);
-//      printf("SMC Data Address: %x \n", smc_data);
-      break;
-    default:   /* no smc_data */
-      return;
-  }
-
-  u8 *smc_data_area, *smc_data_area_end;
-
-  switch (address >> 24)
-  {
-    case 0x02: /* EWRAM */
-      smc_data_area = ewram_smc_data;
-      smc_data_area_end = ewram_smc_data + 0x40000;
-      break;
-    case 0x03: /* IWRAM */
-      smc_data_area = iwram_smc_data;
-      smc_data_area_end = iwram_smc_data + 0x8000;
-      break;
-  }
-  
-  *((u16*) smc_data) = 0;
-
-  while (1)
-  {
-    smc_data = smc_data - 2;
-    if (smc_data < smc_data_area)
-      smc_data = smc_data_area_end - 2; // Wrap to the end
-    if (*((u16*) smc_data) != 0 && *((u16*) smc_data) != UB_16)
-      *((u16*) smc_data) = 0;
-    else 
-      {
-      //printf("Cleared from %x to %x \n", smc_data_right, smc_data);
-      break; }
-
-  }
-
-}
-
-void partial_flush_ram_right(u32 address)
-{
-  u8 *smc_data;
-  u8 *ewram_smc_data = &ewram[0x40000];
-  u8 *iwram_smc_data = iwram;
-
-  switch (address >> 24)
-  {
-    case 0x02: /* EWRAM */
-      smc_data = ewram_smc_data + (address & 0x3FFFE);
-      break;
-    case 0x03: /* IWRAM */
-      smc_data = iwram_smc_data + (address & 0x7FFE);
-//      printf("SMC Data Address: %x \n", smc_data);
-      break;
-    default:   /* no smc_data */
-      return;
-  }
-
-  u8 *smc_data_area, *smc_data_area_end;
-
-  switch (address >> 24)
-  {
-    case 0x02: /* EWRAM */
-      smc_data_area = ewram_smc_data;
-      smc_data_area_end = ewram_smc_data + 0x40000;
-      break;
-    case 0x03: /* IWRAM */
-      smc_data_area = iwram_smc_data;
-      smc_data_area_end = iwram_smc_data + 0x8000;
-      break;
-  }
-  
-  *((u16*) smc_data) = 0;
-
-  while (1)
-  {
-    smc_data = smc_data + 2;
-    if (smc_data == smc_data_area_end)
-      smc_data = smc_data_area; // Wrap to the beginning
-    if (*((u16*) smc_data) != 0 && *((u16*) smc_data) != UB_16)
-      *((u16*) smc_data) = 0;
-    else
-      if (*((u16*) smc_data) == UB_16)
-        *((u16*) smc_data) = 0;
-      break;
-  }
 }
