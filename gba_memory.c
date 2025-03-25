@@ -1764,21 +1764,22 @@ const dma_region_type dma_region_map[17] =
   write_memory##tfsize(type##_ptr, read_value)                                \
 
 #define dma_write_iwram(type, tfsize)                                         \
-  address##tfsize(iwram + 0x8000, type##_ptr & 0x7FFF) =                      \
-                                          eswap##tfsize(read_value);          \
-  if(!(alerts & CPU_ALERT_SMC)) {								\
-     if(address##tfsize(iwram, type##_ptr & 0x7FFF) != 0)                            \
+  if(address##tfsize(iwram + 0x8000, type##_ptr & 0x7FFF) != eswap##tfsize(read_value)) {          \
+    address##tfsize(iwram + 0x8000, type##_ptr & 0x7FFF) = eswap##tfsize(read_value);               \
+    if(address##tfsize(iwram, type##_ptr & 0x7FFF) != 0)   {                         \
+        partial_flush_ram_full_dma(type##_ptr);                                            \
         alerts |= CPU_ALERT_SMC;                                                \
+    }															\
   }															\
-  address##tfsize(iwram, type##_ptr & 0x7FFF) = 0;                            \
 
 #define dma_write_ewram(type, tfsize)                                         \
-  address##tfsize(ewram, type##_ptr & 0x3FFFF) = eswap##tfsize(read_value);   \
-  if(!(alerts & CPU_ALERT_SMC)) {								\
-     if(address##tfsize(ewram, (type##_ptr & 0x3FFFF) + 0x40000) != 0)		        \
-       alerts |= CPU_ALERT_SMC;                                                \
+  if(address##tfsize(ewram, type##_ptr & 0x3FFFF) != eswap##tfsize(read_value)) {       \
+    address##tfsize(ewram, type##_ptr & 0x3FFFF) = eswap##tfsize(read_value);   \
+    if(address##tfsize(ewram, (type##_ptr & 0x3FFFF) + 0x40000) != 0)	{	        \
+         partial_flush_ram_full_dma(type##_ptr);                                            \
+         alerts |= CPU_ALERT_SMC;                                                \
+    }															\
   }															\
-  address##tfsize(ewram, (type##_ptr & 0x3FFFF) + 0x40000) = 0;               \
 
 #define print_line()                                                          \
   dma_print(src_op, dest_op, tfsize);                                         \
@@ -1787,14 +1788,6 @@ const dma_region_type dma_region_map[17] =
 {                                                                             \
   dma_vars_##src_region_type(src);                                            \
   dma_vars_##dest_region_type(dest);                                          \
-                                                                              \
-  switch(dest_ptr >> 24)                                                      \
-  {                                                                           \
-    case 0x02:                                                                \
-    case 0x03:                                                                \
-      partial_flush_ram_left(dest_ptr);                                            \
-      partial_flush_ram_right(dest_ptr + (length * dest_op));                       \
-  }                                                                           \
                                                                               \
   for(i = 0; i < length; i++)                                                 \
   {                                                                           \
