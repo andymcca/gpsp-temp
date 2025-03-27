@@ -231,14 +231,28 @@ u32 arm_to_mips_reg[] =
   *((u32 *)(dest)) = (mips_opcode_j << 26) |                                  \
    ((mips_absolute_offset(offset)) & 0x3FFFFFF)                               \
 
-#define generate_branch_no_cycle_update(writeback_location, new_pc)           \
+#define generate_branch_no_cycle_update(type,writeback_location, new_pc)      \
   if(pc == idle_loop_target_pc)                                               \
   {                                                                           \
     generate_load_pc(reg_a0, new_pc);                                         \
     mips_emit_lui(reg_cycles, 0);                                             \
     generate_function_call_swap_delay(mips_update_gba);                       \
-    mips_emit_j_filler(writeback_location);                                   \
-    mips_emit_nop();                                                          \
+      /* This uses variables from cpu_asm.c's translate_block_builder /       \
+       * translate_block_arm / translate_block_thumb functions. Basically,    \
+       * if we're emitting a jump towards inside the same basic block, we can \
+       * backpatch all we like, but if we're emitting a jump towards another  \
+       * basic block, that block is OFF LIMITS and we issue an indirect       \
+       * branch to it. This allows us to efficiently clear SOME of the RAM    \
+       * code cache after SOME of it has been modified. Ideally, that's one   \
+       * basic block. */                                                      \
+      if (new_pc >= block_start_pc && new_pc < block_end_pc) {                \
+        mips_emit_j_filler(writeback_location);                               \
+        mips_emit_nop();                                                      \
+      }                                                                       \
+      else {                                                                  \
+        generate_load_imm(reg_a0, new_pc);                                    \
+        generate_indirect_branch_no_cycle_update(type);                       \
+      }                                                                       \
   }                                                                           \
   else                                                                        \
   {                                                                           \
@@ -246,13 +260,20 @@ u32 arm_to_mips_reg[] =
     mips_emit_bltzal(reg_cycles,                                              \
      mips_relative_offset(translation_ptr, update_trampoline));               \
     generate_swap_delay();                                                    \
-    mips_emit_j_filler(writeback_location);                                   \
-    mips_emit_nop();                                                          \
+      /* Same as above. */                                                    \
+      if (new_pc >= block_start_pc && new_pc < block_end_pc) {                \
+        mips_emit_j_filler(writeback_location);                               \
+        mips_emit_nop();                                                      \
+      }                                                                       \
+      else {                                                                  \
+        generate_load_imm(reg_a0, new_pc);                                    \
+        generate_indirect_branch_no_cycle_update(type);                       \
+      }                                                                       \
   }                                                                           \
 
-#define generate_branch_cycle_update(writeback_location, new_pc)              \
+#define generate_branch_cycle_update(type,writeback_location, new_pc)         \
   generate_cycle_update();                                                    \
-  generate_branch_no_cycle_update(writeback_location, new_pc)                 \
+  generate_branch_no_cycle_update(type,writeback_location, new_pc)            \
 
 // a0 holds the destination
 
@@ -730,17 +751,19 @@ u32 execute_spsr_restore_body(u32 address)
       break;                                                                  \
   }                                                                           \
 
-#define generate_branch()                                                     \
+/* This is used in the code emission phase, when the branch target is
+  * known. The branch source is written into block_exits here. */
+ #define generate_branch(type)                                                \
 {                                                                             \
   if(condition == 0x0E)                                                       \
   {                                                                           \
-    generate_branch_cycle_update(                                             \
+    generate_branch_cycle_update(type,                                        \
      block_exits[block_exit_position].branch_source,                          \
      block_exits[block_exit_position].branch_target);                         \
   }                                                                           \
   else                                                                        \
   {                                                                           \
-    generate_branch_no_cycle_update(                                          \
+    generate_branch_no_cycle_update(type,                                     \
      block_exits[block_exit_position].branch_source,                          \
      block_exits[block_exit_position].branch_target);                         \
   }                                                                           \
@@ -1777,7 +1800,7 @@ u32 execute_store_cpsr_body(u32 _cpsr, u32 address)
 #define thumb_conditional_branch(condition)                                   \
 {                                                                             \
   generate_condition_##condition();                                           \
-  generate_branch_no_cycle_update(                                            \
+  generate_branch_no_cycle_update(thumb,                                      \
    block_exits[block_exit_position].branch_source,                            \
    block_exits[block_exit_position].branch_target);                           \
   generate_branch_patch_conditional(backpatch_address, translation_ptr);      \
@@ -1788,11 +1811,11 @@ u32 execute_store_cpsr_body(u32 _cpsr, u32 address)
   generate_condition();                                                       \
 
 #define arm_b()                                                               \
-  generate_branch()                                                           \
+  generate_branch(arm)                                                        \
 
 #define arm_bl()                                                              \
   generate_load_pc(reg_r14, (pc + 4));                                        \
-  generate_branch()                                                           \
+  generate_branch(arm)                                                        \
 
 #define arm_bx()                                                              \
   arm_decode_branchx(opcode);                                                 \
@@ -1803,17 +1826,19 @@ u32 execute_store_cpsr_body(u32 _cpsr, u32 address)
 #define arm_swi()                                                             \
   generate_load_pc(reg_a0, (pc + 4));                                         \
   generate_function_call_swap_delay(execute_swi);                             \
-  generate_branch()                                                           \
+  generate_branch(arm)                                                        \
 
+/* This is used in the code emission phase, when the branch target is
+  * known. The branch source is written into block_exits here. */
 #define thumb_b()                                                             \
-  generate_branch_cycle_update(                                               \
+  generate_branch_cycle_update(thumb,                                         \
    block_exits[block_exit_position].branch_source,                            \
    block_exits[block_exit_position].branch_target);                           \
   block_exit_position++                                                       \
 
 #define thumb_bl()                                                            \
   generate_load_pc(reg_r14, ((pc + 2) | 0x01));                               \
-  generate_branch_cycle_update(                                               \
+  generate_branch_cycle_update(thumb,                                         \
    block_exits[block_exit_position].branch_source,                            \
    block_exits[block_exit_position].branch_target);                           \
   block_exit_position++                                                       \
@@ -1866,10 +1891,12 @@ u32 execute_store_cpsr_body(u32 _cpsr, u32 address)
   #define emit_trace_arm_instruction(pc)
 #endif
 
+/* This is used in the code emission phase, when the branch target is
+  * known. The branch source is written into block_exits here. */
 #define thumb_swi()                                                           \
   generate_load_pc(reg_a0, (pc + 2));                                         \
   generate_function_call_swap_delay(execute_swi);                             \
-  generate_branch_cycle_update(                                               \
+  generate_branch_cycle_update(arm, /* SWI target == ARM */                   \
    block_exits[block_exit_position].branch_source,                            \
    block_exits[block_exit_position].branch_target);                           \
   block_exit_position++                                                       \
