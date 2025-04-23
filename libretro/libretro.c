@@ -408,7 +408,7 @@ static void video_run(void)
 
    if (skip_next_frame)
    {
-      video_cb(NULL, GBA_SCREEN_WIDTH, GBA_SCREEN_HEIGHT,
+      // video_cb(NULL, GBA_SCREEN_WIDTH, GBA_SCREEN_HEIGHT,
             GBA_SCREEN_PITCH * 2);
       return;
    }
@@ -1098,64 +1098,11 @@ void retro_run(void)
 
    /* Check whether current frame should
     * be skipped */
-   skip_next_frame = 0;
 
-   if (current_frameskip_type != no_frameskip)
-   {
-      switch (current_frameskip_type)
-      {
-         case auto_frameskip:
-
-            skip_next_frame =
-                  (audio_buff_active && audio_buff_underrun) ?
-                        1 : 0;
-
-            if (!skip_next_frame ||
-                (frameskip_counter >= FRAMESKIP_MAX))
-            {
-               skip_next_frame   = 0;
-               frameskip_counter = 0;
-            }
-            else
-               frameskip_counter++;
-
-            break;
-         case auto_threshold_frameskip:
-
-            skip_next_frame =
-                  (audio_buff_active &&
-                        (audio_buff_occupancy < frameskip_threshold)) ?
-                              1 : 0;
-
-            if (!skip_next_frame ||
-                (frameskip_counter >= FRAMESKIP_MAX))
-            {
-               skip_next_frame   = 0;
-               frameskip_counter = 0;
-            }
-            else
-               frameskip_counter++;
-
-            break;
-         case fixed_interval_frameskip:
-
-            if (frameskip_counter < frameskip_interval)
-            {
-               skip_next_frame   = 1;
-               frameskip_counter++;
-            }
-            else
-            {
-               skip_next_frame   = 0;
-               frameskip_counter = 0;
-            }
-
-            break;
-         default:
-            skip_next_frame = 0;
-            break;
-      }
-   }
+   if(skip_next_frame == 0)
+	skip_next_frame = 1;
+  else
+        skip_next_frame = 0;
 
    /* If frameskip settings have changed, update
     * frontend audio latency */
