@@ -95,7 +95,7 @@ _##symbol:
 #define load_registers_arm()                                                 ;\
   ldr reg_x0, [reg_base, #REG_R0]                                            ;\
   ldr reg_x1, [reg_base, #REG_R1]                                            ;\
-  ldr reg_x2, [reg_base, #REG_R6]                                            ;\
+  ldr reg_x2, [reg_base, #REG_R2]                                            ;\
   ldr reg_x3, [reg_base, #REG_R9]                                            ;\
   ldr reg_x4, [reg_base, #REG_R12]                                           ;\
   ldr reg_x5, [reg_base, #REG_R14]                                           ;\
@@ -109,7 +109,7 @@ _##symbol:
 #define store_registers_arm()                                                ;\
   str reg_x0, [reg_base, #REG_R0]                                            ;\
   str reg_x1, [reg_base, #REG_R1]                                            ;\
-  str reg_x2, [reg_base, #REG_R6]                                            ;\
+  str reg_x2, [reg_base, #REG_R2]                                            ;\
   str reg_x3, [reg_base, #REG_R9]                                            ;\
   str reg_x4, [reg_base, #REG_R12]                                           ;\
   str reg_x5, [reg_base, #REG_R14]                                           ;\
@@ -122,7 +122,7 @@ _##symbol:
   bne 80f                                                                    ;\
   str reg_x0, [reg_base, #REG_R0]                                            ;\
   str reg_x1, [reg_base, #REG_R1]                                            ;\
-  str reg_x2, [reg_base, #REG_R6]                                            ;\
+  str reg_x2, [reg_base, #REG_R2]                                            ;\
   str reg_x3, [reg_base, #REG_R9]                                            ;\
   str reg_x4, [reg_base, #REG_R12]                                           ;\
   str reg_x5, [reg_base, #REG_R14]                                           ;\

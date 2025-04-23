@@ -171,11 +171,11 @@ u32 arm_register_allocation[] =
 {
   reg_x0,       /* GBA r0  */
   reg_x1,       /* GBA r1  */
-  mem_reg,      /* GBA r2  */
+  reg_x2,      /* GBA r2  */
   mem_reg,      /* GBA r3  */
   mem_reg,      /* GBA r4  */
   mem_reg,      /* GBA r5  */
-  reg_x2,       /* GBA r6  */
+  mem_reg,       /* GBA r6  */
   mem_reg,      /* GBA r7  */
   mem_reg,      /* GBA r8  */
   reg_x3,       /* GBA r9  */
