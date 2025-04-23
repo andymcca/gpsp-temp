@@ -2497,12 +2497,12 @@ void translate_icache_sync() {
 
 // INITIAL_TOP_TAG is 0xFFFD.  0xFFFF signifies an Unconditional Branch (end of normal block)
 //
-#define LAST_TAG_NUM       0x0101
+#define LAST_TAG_NUM       0x0303
 #define INITIAL_TOP_TAG    0xFFFD
-#define CODE_TAG_BLOCK16   0x0101
-#define CODE_TAG_BLOCK32   0x01010101
-#define UB_16		   0xFFFF
-#define UB_32		   0xFFFFFFFF
+#define CODE_TAG_BLOCK16   0x0303
+#define CODE_TAG_BLOCK32   0x03030303
+#define UB_16		   0x0101
+#define UB_32		   0x01010101
 
 #define VALID_TAG(tagn) (tagn > LAST_TAG_NUM && tagn <= INITIAL_TOP_TAG)
 
@@ -2891,11 +2891,11 @@ u8 function_cc *block_lookup_address_thumb(u32 pc)
 }                                                                             \
 
 #define MAX_BLOCK_SIZE 8192
-#define arm_MAX_BLOCK_SIZE 8192
+#define arm_MAX_BLOCK_SIZE 256
 #define thumb_MAX_BLOCK_SIZE 8192
 
 #define MAX_EXITS      256
-#define arm_MAX_EXITS      256
+#define arm_MAX_EXITS      2
 #define thumb_MAX_EXITS      256
 
 block_data_type block_data[MAX_BLOCK_SIZE];
@@ -2935,6 +2935,20 @@ block_data_type block_data[MAX_BLOCK_SIZE];
   if(address16(pc_address_block, ((block_end_pc - 2) & mask) + offset)  <= CODE_TAG_BLOCK16)        \
     address16(pc_address_block, ((block_end_pc - 2)  & mask) + offset) =           \
       UB_16;                                                       \
+}
+
+#define arm_tag_check() {                                          \
+  intptr_t offset = (pc < 0x03000000) ? 0x40000 : -0x8000;                    \
+  intptr_t mask = 0x7FFF;                 \
+  if(address16(pc_address_block, ((block_end_pc) & mask) + offset) > CODE_TAG_BLOCK16)  {      \
+      continue_block = 0;       }                                                \
+}
+
+#define thumb_tag_check() {                                        \
+  intptr_t offset = (pc < 0x03000000) ? 0x40000 : -0x8000;                    \
+  intptr_t mask = 0x7FFF;                       \
+  if(address16(pc_address_block, ((block_end_pc) & mask) + offset)  > CODE_TAG_BLOCK16)  {      \
+      continue_block = 0;       }                                                \
 }
 
 /*
@@ -3000,15 +3014,14 @@ static s32 BinarySearch(u32* Array, u32 Value, u32 Size)
 #define scan_block(type, smc_write_op)                                        \
 {                                                                             \
   __label__ block_end;                                                        \
-  u8 continue_block = 1;                                                      \
   u32 branch_targets_sorted[MAX_EXITS];                                       \
   u32 sorted_branch_count = 0;                                                \
   /* Find the end of the block */                                             \
   do                                                                          \
   {                                                                           \
     check_pc_region(block_end_pc);                                            \
-    type##_load_opcode();                                                     \
     smc_write_##type##_##smc_write_op();                                      \
+    type##_load_opcode();                                                     \
     type##_flag_status();                                                     \
                                                                               \
     if(type##_exit_point)                                                     \
@@ -3052,6 +3065,8 @@ static s32 BinarySearch(u32* Array, u32 Value, u32 Size)
         if (ram_region || BinarySearch(branch_targets_sorted, block_end_pc,   \
           sorted_branch_count) == -1)                                         \
           continue_block = 0;                                                 \
+        if(ram_region)								\
+          type##_ub();								\
       }                                                                       \
       if(block_exit_position == type##_MAX_EXITS)                             \
         continue_block = 0;                                                   \
@@ -3069,6 +3084,8 @@ static s32 BinarySearch(u32* Array, u32 Value, u32 Size)
       {                                                                       \
         translation_gate_required = 1;                                        \
         continue_block = 0;                                                   \
+        if(ram_region)								\
+          type##_ub();								\
       }                                                                       \
     }                                                                         \
                                                                               \
@@ -3118,6 +3135,7 @@ bool translate_block_arm(u32 pc, bool ram_region)
   u8 *backpatch_address = NULL;
   u8 *translation_ptr = NULL;
   u8 *translation_cache_limit = NULL;
+  u8 continue_block = 1; 
   s32 i;
   u32 flag_status;
   block_exit_type block_exits[MAX_EXITS];
@@ -3302,6 +3320,7 @@ bool translate_block_thumb(u32 pc, bool ram_region)
   u8 *backpatch_address = NULL;
   u8 *translation_ptr = NULL;
   u8 *translation_cache_limit = NULL;
+  u8 continue_block = 1; 
   s32 i;
   u32 flag_status;
   block_exit_type block_exits[MAX_EXITS];
@@ -3565,7 +3584,7 @@ void partial_flush_ram_full_dma(u32 address)
       return;
   }
 
-  u8 *smc_data_area, *smc_data_area_end, *smc_data_right ;
+  u8 *smc_data_area, *smc_data_area_end, *smc_data_right, *smc_data_left ;
   smc_data_right = smc_data; // Save this pointer to go to the right later
 
   switch (address >> 24)
@@ -3582,38 +3601,39 @@ void partial_flush_ram_full_dma(u32 address)
   
   *((u16*) smc_data) = 0;
 
-  while (1)
+    while (1)
   {
     smc_data = smc_data - 2;
     if (smc_data < smc_data_area)
-      smc_data = smc_data_area_end - 2; // Wrap to the end
-    if (*((u16*) smc_data) != 0)
-      *((u16*) smc_data) = 0;
-    else 
-      {
-      //printf("Cleared from %x to %x \n", smc_data_right, smc_data);
-      break; }
+      break;
+      //smc_data = smc_data_area_end - 2; // Wrap to the end
+    if (*((u16*) smc_data) < CODE_TAG_BLOCK16)
+      break; 
 
   }
-
+  
+  smc_data_left = smc_data;
   smc_data = smc_data_right;
 
   while (1)
   {
     smc_data = smc_data + 2;
     if (smc_data == smc_data_area_end)
-      smc_data = smc_data_area; // Wrap to the beginning
-    if (*((u16*) smc_data) != 0)
-      *((u16*) smc_data) = 0;
-    else
+       break;
+       //smc_data = smc_data_area; // Wrap to the beginning
+    if (*((u16*) smc_data) < CODE_TAG_BLOCK16)
       break;
   }
+  
+  smc_data_right = smc_data;
+  memset(&smc_data_left[0], 0, smc_data_right - smc_data_left);
 
 }
 
 void partial_flush_ram_full(u32 address)
 {
   u8 *smc_data;
+  u16 *smc_data_16;
   u8 *ewram_smc_data = &ewram[0x40000];
   u8 *iwram_smc_data = iwram;
 
@@ -3630,9 +3650,9 @@ void partial_flush_ram_full(u32 address)
       return;
   }
 
-  u8 *smc_data_area, *smc_data_area_end, *smc_data_right ;
+  u8 *smc_data_area, *smc_data_area_end, *smc_data_right, *smc_data_left ;
   smc_data_right = smc_data; // Save this pointer to go to the right later
-
+ 
   switch (address >> 24)
   {
     case 0x02: /* EWRAM */
@@ -3647,31 +3667,62 @@ void partial_flush_ram_full(u32 address)
   
   *((u16*) smc_data) = 0;
 
+  // ******* TRANSLATION GATES ********
+
+  u8 y = 0;
+ 
+  // Align the address to ARM instruction interval and set to previous instruction
+  u32 translation_gate_dyn = ((address & ~0x03) - 4);
+ 
+  // Check if the SMC address already appears in our Translation Gate list
+  for(y= 0; y < translation_gate_targets; y++) {
+ 
+    //printf("translation gate proposed entry : %x \n", translation_gate_dyn);
+    if(translation_gate_target_pc[y] == translation_gate_dyn)
+     break;
+ 
+  }
+
+  // If it doesn't exist, y = translation_gate_targets
+  if(y == translation_gate_targets) {
+    //printf("translation gate proposed entry : %x  y: %x \n", translation_gate_targets, translation_gate_dyn);
+    //fflush(stdout);
+    translation_gate_target_pc[translation_gate_targets] = translation_gate_dyn;
+    
+    if(translation_gate_targets == MAX_TRANSLATION_GATES) {
+      // This is a circular array, so let's set it back to 3 so that we overwrite the oldest entries
+      // except for the ones specified in gba_over (ToDo: need to actually determine how many are specified)
+      translation_gate_targets = 0;
+    } 
+    else {
+    translation_gate_targets++;
+    }
+  }
   while (1)
   {
     smc_data = smc_data - 2;
     if (smc_data < smc_data_area)
-      smc_data = smc_data_area_end - 2; // Wrap to the end
-    if (*((u16*) smc_data) != 0)
-      *((u16*) smc_data) = 0;
-    else 
-      {
-      //printf("Cleared from %x to %x \n", smc_data_right, smc_data);
-      break; }
+      break;
+      //smc_data = smc_data_area_end - 2; // Wrap to the end
+    if (*((u16*) smc_data) < CODE_TAG_BLOCK16)
+      break; 
 
   }
-
+  
+  smc_data_left = smc_data;
   smc_data = smc_data_right;
 
   while (1)
   {
     smc_data = smc_data + 2;
     if (smc_data == smc_data_area_end)
-      smc_data = smc_data_area; // Wrap to the beginning
-    if (*((u16*) smc_data) != 0)
-      *((u16*) smc_data) = 0;
-    else
+       break;
+       //smc_data = smc_data_area; // Wrap to the beginning
+    if (*((u16*) smc_data) < CODE_TAG_BLOCK16)
       break;
   }
+  
+  smc_data_right = smc_data;
+  memset(&smc_data_left[0], 0, smc_data_right - smc_data_left);
 
 }

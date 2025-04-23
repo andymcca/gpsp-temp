@@ -150,7 +150,7 @@ u32 function_cc update_gba(int remaining_cycles)
           // Render the scan line
           if(reg[OAM_UPDATED])
             oam_update_count++;
-
+          
           update_scanline();
 
           // Trigger the HBlank DMAs if enabled

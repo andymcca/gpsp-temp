@@ -10,10 +10,10 @@
 /* Cache sizes and their config knobs */
 #if defined(SMALL_TRANSLATION_CACHE)
   #define ROM_TRANSLATION_CACHE_SIZE (1024 * 1024 * 2)
-  #define RAM_TRANSLATION_CACHE_SIZE (1024 * 384)
+  #define RAM_TRANSLATION_CACHE_SIZE (1024 * 2048)
 #else
   #define ROM_TRANSLATION_CACHE_SIZE (1024 * 1024 * 10)
-  #define RAM_TRANSLATION_CACHE_SIZE (1024 * 512)
+  #define RAM_TRANSLATION_CACHE_SIZE (1024 *2048)
 #endif
 
 /* Should be an upperbound to the maximum number of bytes a single JIT'ed

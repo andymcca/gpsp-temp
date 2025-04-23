@@ -4,12 +4,11 @@ INCFLAGS   := -I$(CORE_DIR)/libretro -I$(LIBRETRO_COMM_DIR)/include  -I$(CORE_DI
 
 SOURCES_ASM := $(CORE_DIR)/bios_data.S
 
-SOURCES_CC := $(CORE_DIR)/video.cc
-
 SOURCES_C := $(CORE_DIR)/main.c \
              $(CORE_DIR)/cpu.c \
              $(CORE_DIR)/gba_memory.c \
              $(CORE_DIR)/savestate.c \
+             $(CORE_DIR)/video.c \
              $(CORE_DIR)/input.c \
              $(CORE_DIR)/sound.c \
              $(CORE_DIR)/cheats.c \
@@ -42,5 +41,8 @@ ifeq ($(HAVE_DYNAREC), 1)
     SOURCES_ASM += $(CORE_DIR)/mips/mips_stub.S
   endif
 endif
+
+CFLAGS += -DARM_ARCH_BLENDING_OPTS
+SOURCES_ASM += $(CORE_DIR)/arm/video_blend.S
 
 
