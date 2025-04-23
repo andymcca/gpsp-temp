@@ -2,7 +2,7 @@ DEBUG=0
 FRONTEND_SUPPORTS_RGB565=1
 FORCE_32BIT_ARCH=0
 MMAP_JIT_CACHE=0
-platfrom=miyoo
+platform=miyoo
 
 UNAME=$(shell uname -a)
 
