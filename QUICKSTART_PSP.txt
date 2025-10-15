@@ -1,0 +1,102 @@
+================================================================================
+                    gpSP for PSP - Quick Start Guide
+================================================================================
+
+BUILDING:
+---------
+1. Install PSPSDK (PSP development toolchain)
+2. Open a terminal/command prompt
+3. Navigate to the gpSP directory
+4. Run: make -f Makefile.psp
+5. Wait for build to complete
+6. Find EBOOT.PBP in the current directory
+
+INSTALLATION:
+------------
+1. Connect PSP to computer via USB
+2. Create folders: ms0:/PSP/GAME/gpSP/
+                   ms0:/PSP/GAME/gpSP/ROMS/
+                   ms0:/PSP/GAME/gpSP/SAVES/
+3. Copy EBOOT.PBP to ms0:/PSP/GAME/gpSP/
+4. Copy your .gba ROM files to ms0:/PSP/GAME/gpSP/ROMS/
+5. Disconnect PSP safely
+
+RUNNING:
+--------
+1. On PSP, go to Game menu
+2. Select "Memory Stick"
+3. Find and run "gpSP"
+4. Use file browser to select a ROM
+5. Game starts automatically
+
+CONTROLS (In-Game):
+-------------------
+D-Pad       = GBA D-Pad
+Cross (X)   = GBA A
+Circle (O)  = GBA B
+Triangle    = Turbo A
+Square      = Turbo B
+L Trigger   = GBA L
+R Trigger   = GBA R
+Start       = GBA Start
+Select      = GBA Select
+HOME        = Open Menu
+
+CONTROLS (Menu):
+----------------
+Up/Down     = Navigate
+Cross (X)   = Select
+Circle (O)  = Back/Cancel
+
+SUPPORTED FILES:
+----------------
+.gba - Standard GBA ROM
+.bin - GBA ROM binary
+.agb - GBA ROM
+.gbz - Compressed GBA ROM
+
+SAVE FILES:
+-----------
+Saves are automatic! They're stored in:
+ms0:/PSP/GAME/gpSP/SAVES/
+
+Files are named: [romname].sav
+
+TROUBLESHOOTING:
+----------------
+ROM won't load?
+  - Check file format (.gba, .bin, .agb, .gbz)
+  - Verify ROM is not corrupted
+  - Try a different ROM
+
+No sound?
+  - Check PSP volume settings
+  - Try adjusting volume in PSP settings
+
+Crashes?
+  - Ensure CFW (Custom Firmware) is installed
+  - Try different ROM
+  - Check Memory Stick has free space
+
+Performance issues?
+  - Some games are more demanding
+  - Try closing other applications
+  - Check PSP battery level
+
+TIPS:
+-----
+- Keep PSP plugged in for best performance
+- Organize ROMs in the ROMS folder
+- Press HOME to access menu during gameplay
+- Save files are compatible with PC emulators
+- Battery indicator works in PSP menu
+
+FOR MORE INFO:
+--------------
+See README_PSP.md for detailed information
+See BUILD_PSP.md for building instructions
+
+================================================================================
+                        Enjoy gaming on your PSP!
+================================================================================
+

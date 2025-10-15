@@ -1,0 +1,337 @@
+/home/dev/pspdev/psp/sdk/lib/build.mak:49: "PSP_LARGE_MEMORY" flag is not necessary targeting firmware versions above 3.90
+psp-gcc -I. -I/home/dev/pspdev/psp/include -I/home/dev/pspdev/psp/sdk/include -G0 -Wall -O3 -fomit-frame-pointer -ffast-math -march=allegrex -mfp32 -mgp32 -mlong32 -mabi=eabi -falign-functions=32 -falign-loops -falign-labels -falign-jumps -DPSP -DMIPS_ARCH -DHAVE_DYNAREC -DMIPS_HAS_R2_INSTS -DSMALL_TRANSLATION_CACHE -DPSP_STANDALONE -I. -Ipsp -D_PSP_FW_VERSION=500   -c -o gba_memory.o gba_memory.c
+psp-gcc -I. -I/home/dev/pspdev/psp/include -I/home/dev/pspdev/psp/sdk/include -G0 -Wall -O3 -fomit-frame-pointer -ffast-math -march=allegrex -mfp32 -mgp32 -mlong32 -mabi=eabi -falign-functions=32 -falign-loops -falign-labels -falign-jumps -DPSP -DMIPS_ARCH -DHAVE_DYNAREC -DMIPS_HAS_R2_INSTS -DSMALL_TRANSLATION_CACHE -DPSP_STANDALONE -I. -Ipsp -D_PSP_FW_VERSION=500   -c -o savestate.o savestate.c
+psp-gcc -I. -I/home/dev/pspdev/psp/include -I/home/dev/pspdev/psp/sdk/include -G0 -Wall -O3 -fomit-frame-pointer -ffast-math -march=allegrex -mfp32 -mgp32 -mlong32 -mabi=eabi -falign-functions=32 -falign-loops -falign-labels -falign-jumps -DPSP -DMIPS_ARCH -DHAVE_DYNAREC -DMIPS_HAS_R2_INSTS -DSMALL_TRANSLATION_CACHE -DPSP_STANDALONE -I. -Ipsp -D_PSP_FW_VERSION=500   -c -o input.o input.c
+psp-gcc -I. -I/home/dev/pspdev/psp/include -I/home/dev/pspdev/psp/sdk/include -G0 -Wall -O3 -fomit-frame-pointer -ffast-math -march=allegrex -mfp32 -mgp32 -mlong32 -mabi=eabi -falign-functions=32 -falign-loops -falign-labels -falign-jumps -DPSP -DMIPS_ARCH -DHAVE_DYNAREC -DMIPS_HAS_R2_INSTS -DSMALL_TRANSLATION_CACHE -DPSP_STANDALONE -I. -Ipsp -D_PSP_FW_VERSION=500   -c -o sound.o sound.c
+gba_memory.c: In function 'reload_timing_info':
+gba_memory.c:401:12: warning: unused variable 'waitcnt' [-Wunused-variable]
+  401 |   uint16_t waitcnt = read_ioreg(REG_WAITCNT);
+      |            ^~~~~~~
+gba_memory.c: In function 'fake_rtc_save':
+gba_memory.c:1294:29: warning: format '%u' expects argument of type 'unsigned int', but argument 2 has type 'u32' {aka 'long unsigned int'} [-Wformat=]
+ 1294 |   printf("FAKE_RTC: Saving %u minutes to '%s'\n", fake_rtc_state.total_minutes, save_path_full);
+      |                            ~^                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                             |                                   |
+      |                             unsigned int                        u32 {aka long unsigned int}
+      |                            %lu
+gba_memory.c: In function 'fake_rtc_load':
+gba_memory.c:1318:33: warning: format '%u' expects argument of type 'unsigned int', but argument 2 has type 'u32' {aka 'long unsigned int'} [-Wformat=]
+ 1318 |       printf("FAKE_RTC: Loaded %u minutes from file\n", fake_rtc_state.total_minutes);
+      |                                ~^                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                 |                                     |
+      |                                 unsigned int                          u32 {aka long unsigned int}
+      |                                %lu
+gba_memory.c: In function 'fake_rtc_bump_time':
+gba_memory.c:1353:49: warning: format '%u' expects argument of type 'unsigned int', but argument 2 has type 'u32' {aka 'long unsigned int'} [-Wformat=]
+ 1353 |   printf("FAKE_RTC: total_minutes changed from %u to %u\n", old_total, fake_rtc_state.total_minutes);
+      |                                                ~^           ~~~~~~~~~
+      |                                                 |           |
+      |                                                 |           u32 {aka long unsigned int}
+      |                                                 unsigned int
+      |                                                %lu
+gba_memory.c:1353:55: warning: format '%u' expects argument of type 'unsigned int', but argument 3 has type 'u32' {aka 'long unsigned int'} [-Wformat=]
+ 1353 |   printf("FAKE_RTC: total_minutes changed from %u to %u\n", old_total, fake_rtc_state.total_minutes);
+      |                                                      ~^                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                                       |                              |
+      |                                                       unsigned int                   u32 {aka long unsigned int}
+      |                                                      %lu
+gba_memory.c: In function 'fake_rtc_get_time':
+gba_memory.c:1375:53: warning: format '%u' expects argument of type 'unsigned int', but argument 2 has type 'u32' {aka 'long unsigned int'} [-Wformat=]
+ 1375 |   printf("FAKE_RTC: get_time called, total_minutes=%u, returning %02d:%02d:%02d\n",
+      |                                                    ~^
+      |                                                     |
+      |                                                     unsigned int
+      |                                                    %lu
+ 1376 |          fake_rtc_state.total_minutes, time_out->tm_hour, time_out->tm_min, time_out->tm_sec);
+      |          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~                
+      |                        |
+      |                        u32 {aka long unsigned int}
+psp-gcc -I. -I/home/dev/pspdev/psp/include -I/home/dev/pspdev/psp/sdk/include -G0 -Wall -O3 -fomit-frame-pointer -ffast-math -march=allegrex -mfp32 -mgp32 -mlong32 -mabi=eabi -falign-functions=32 -falign-loops -falign-labels -falign-jumps -DPSP -DMIPS_ARCH -DHAVE_DYNAREC -DMIPS_HAS_R2_INSTS -DSMALL_TRANSLATION_CACHE -DPSP_STANDALONE -I. -Ipsp -D_PSP_FW_VERSION=500   -c -o cheats.o cheats.c
+psp-gcc -I. -I/home/dev/pspdev/psp/include -I/home/dev/pspdev/psp/sdk/include -G0 -Wall -O3 -fomit-frame-pointer -ffast-math -march=allegrex -mfp32 -mgp32 -mlong32 -mabi=eabi -falign-functions=32 -falign-loops -falign-labels -falign-jumps -DPSP -DMIPS_ARCH -DHAVE_DYNAREC -DMIPS_HAS_R2_INSTS -DSMALL_TRANSLATION_CACHE -DPSP_STANDALONE -I. -Ipsp -D_PSP_FW_VERSION=500   -c -o memmap.o memmap.c
+cheats.c: In function 'cheat_parse':
+cheats.c:239:38: warning: format '%x' expects argument of type 'unsigned int *', but argument 3 has type 'u32 *' {aka 'long unsigned int *'} [-Wformat=]
+  239 |       if (2 != sscanf(&buf[pos], "%08x %04hx", &op1, &op2))
+      |                                   ~~~^         ~~~~
+      |                                      |         |
+      |                                      |         u32 * {aka long unsigned int *}
+      |                                      unsigned int *
+      |                                   %08lx
+psp-gcc -I. -I/home/dev/pspdev/psp/include -I/home/dev/pspdev/psp/sdk/include -G0 -Wall -O3 -fomit-frame-pointer -ffast-math -march=allegrex -mfp32 -mgp32 -mlong32 -mabi=eabi -falign-functions=32 -falign-loops -falign-labels -falign-jumps -DPSP -DMIPS_ARCH -DHAVE_DYNAREC -DMIPS_HAS_R2_INSTS -DSMALL_TRANSLATION_CACHE -DPSP_STANDALONE -I. -Ipsp -D_PSP_FW_VERSION=500   -c -o serial.o serial.c
+psp-gcc -I. -I/home/dev/pspdev/psp/include -I/home/dev/pspdev/psp/sdk/include -G0 -Wall -O3 -fomit-frame-pointer -ffast-math -march=allegrex -mfp32 -mgp32 -mlong32 -mabi=eabi -falign-functions=32 -falign-loops -falign-labels -falign-jumps -DPSP -DMIPS_ARCH -DHAVE_DYNAREC -DMIPS_HAS_R2_INSTS -DSMALL_TRANSLATION_CACHE -DPSP_STANDALONE -I. -Ipsp -D_PSP_FW_VERSION=500   -c -o gbp.o gbp.c
+psp-gcc -I. -I/home/dev/pspdev/psp/include -I/home/dev/pspdev/psp/sdk/include -G0 -Wall -O3 -fomit-frame-pointer -ffast-math -march=allegrex -mfp32 -mgp32 -mlong32 -mabi=eabi -falign-functions=32 -falign-loops -falign-labels -falign-jumps -DPSP -DMIPS_ARCH -DHAVE_DYNAREC -DMIPS_HAS_R2_INSTS -DSMALL_TRANSLATION_CACHE -DPSP_STANDALONE -I. -Ipsp -D_PSP_FW_VERSION=500   -c -o rfu.o rfu.c
+psp-gcc -I. -I/home/dev/pspdev/psp/include -I/home/dev/pspdev/psp/sdk/include -G0 -Wall -O3 -fomit-frame-pointer -ffast-math -march=allegrex -mfp32 -mgp32 -mlong32 -mabi=eabi -falign-functions=32 -falign-loops -falign-labels -falign-jumps -DPSP -DMIPS_ARCH -DHAVE_DYNAREC -DMIPS_HAS_R2_INSTS -DSMALL_TRANSLATION_CACHE -DPSP_STANDALONE -I. -Ipsp -D_PSP_FW_VERSION=500   -c -o gba_cc_lut.o gba_cc_lut.c
+gba_memory.c: In function 'fake_rtc_save.part.0':
+gba_memory.c:1292:56: warning: '%s' directive output may be truncated writing 12 bytes into a region of size between 0 and 511 [-Wformat-truncation=]
+ 1292 |   snprintf(save_path_full, sizeof(save_path_full), "%s/%s", save_path, FAKE_RTC_SAVE_FILE);
+      |                                                        ^~
+gba_memory.c:1292:3: note: 'snprintf' output between 14 and 525 bytes into a destination of size 512
+ 1292 |   snprintf(save_path_full, sizeof(save_path_full), "%s/%s", save_path, FAKE_RTC_SAVE_FILE);
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+gba_memory.c: In function 'fake_rtc_load':
+gba_memory.c:1311:56: warning: '%s' directive output may be truncated writing 12 bytes into a region of size between 0 and 511 [-Wformat-truncation=]
+ 1311 |   snprintf(save_path_full, sizeof(save_path_full), "%s/%s", save_path, FAKE_RTC_SAVE_FILE);
+      |                                                        ^~
+gba_memory.c:1311:3: note: 'snprintf' output between 14 and 525 bytes into a destination of size 512
+ 1311 |   snprintf(save_path_full, sizeof(save_path_full), "%s/%s", save_path, FAKE_RTC_SAVE_FILE);
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+psp-gcc -I. -I/home/dev/pspdev/psp/include -I/home/dev/pspdev/psp/sdk/include -G0 -Wall -O3 -fomit-frame-pointer -ffast-math -march=allegrex -mfp32 -mgp32 -mlong32 -mabi=eabi -falign-functions=32 -falign-loops -falign-labels -falign-jumps -DPSP -DMIPS_ARCH -DHAVE_DYNAREC -DMIPS_HAS_R2_INSTS -DSMALL_TRANSLATION_CACHE -DPSP_STANDALONE -I. -Ipsp -D_PSP_FW_VERSION=500 -Wno-unused-variable -Wno-unused-label -c cpu_threaded.c -o cpu_threaded.o
+cpu_threaded.c: In function 'block_lookup_address_arm':
+cpu_threaded.c:2668:21: warning: format '%x' expects argument of type 'unsigned int', but argument 2 has type 'u32' {aka 'long unsigned int'} [-Wformat=]
+ 2668 |   printf("bad jump %x (%x)\n", pc, reg[REG_PC]);
+      |                    ~^          ~~
+      |                     |          |
+      |                     |          u32 {aka long unsigned int}
+      |                     unsigned int
+      |                    %lx
+cpu_threaded.c:2668:25: warning: format '%x' expects argument of type 'unsigned int', but argument 3 has type 'u32' {aka 'long unsigned int'} [-Wformat=]
+ 2668 |   printf("bad jump %x (%x)\n", pc, reg[REG_PC]);
+      |                        ~^          ~~~~~~~~~~~
+      |                         |             |
+      |                         unsigned int  u32 {aka long unsigned int}
+      |                        %lx
+cpu_threaded.c: In function 'block_lookup_address_thumb':
+cpu_threaded.c:2683:21: warning: format '%x' expects argument of type 'unsigned int', but argument 2 has type 'u32' {aka 'long unsigned int'} [-Wformat=]
+ 2683 |   printf("bad jump %x (%x)\n", pc, reg[REG_PC]);
+      |                    ~^          ~~
+      |                     |          |
+      |                     |          u32 {aka long unsigned int}
+      |                     unsigned int
+      |                    %lx
+cpu_threaded.c:2683:25: warning: format '%x' expects argument of type 'unsigned int', but argument 3 has type 'u32' {aka 'long unsigned int'} [-Wformat=]
+ 2683 |   printf("bad jump %x (%x)\n", pc, reg[REG_PC]);
+      |                        ~^          ~~~~~~~~~~~
+      |                         |             |
+      |                         unsigned int  u32 {aka long unsigned int}
+      |                        %lx
+psp-g++ -I. -I/home/dev/pspdev/psp/include -I/home/dev/pspdev/psp/sdk/include -G0 -Wall -O3 -fomit-frame-pointer -ffast-math -march=allegrex -mfp32 -mgp32 -mlong32 -mabi=eabi -falign-functions=32 -falign-loops -falign-labels -falign-jumps -DPSP -DMIPS_ARCH -DHAVE_DYNAREC -DMIPS_HAS_R2_INSTS -DSMALL_TRANSLATION_CACHE -DPSP_STANDALONE -I. -Ipsp -I. -I/home/dev/pspdev/psp/include -I/home/dev/pspdev/psp/sdk/include -G0 -Wall -O3 -fomit-frame-pointer -ffast-math -march=allegrex -mfp32 -mgp32 -mlong32 -mabi=eabi -falign-functions=32 -falign-loops -falign-labels -falign-jumps -DPSP -DMIPS_ARCH -DHAVE_DYNAREC -DMIPS_HAS_R2_INSTS -DSMALL_TRANSLATION_CACHE -DPSP_STANDALONE -I. -Ipsp -fno-rtti -fno-exceptions -std=c++11 -D_PSP_FW_VERSION=500 -c video.cc -o video.o
+cpu_threaded.c: In function 'translate_block_arm':
+cpu_threaded.c:3146:6: warning: variable 'translation_gate_required' set but not used [-Wunused-but-set-variable]
+ 3146 |   u8 translation_gate_required = 0; /* gets updated by scan_block */          \
+      |      ^~~~~~~~~~~~~~~~~~~~~~~~~
+cpu_threaded.c: In function 'translate_block_thumb':
+cpu_threaded.c:3333:6: warning: variable 'translation_gate_required' set but not used [-Wunused-but-set-variable]
+ 3333 |   u8 translation_gate_required = 0; /* gets updated by scan_block */
+      |      ^~~~~~~~~~~~~~~~~~~~~~~~~
+cpu_threaded.c: In function 'partial_flush_ram_full_dma':
+cpu_threaded.c:3604:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+ 3604 |     if (*((u16*) smc_data) == 0)
+      |     ^~
+cpu_threaded.c:3606:7: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+ 3606 |       *((u16*) smc_data) = 0;
+      |       ^
+cpu_threaded.c: In function 'partial_flush_ram_full':
+cpu_threaded.c:3704:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+ 3704 |     if (*((u16*) smc_data) == 0)
+      |     ^~
+cpu_threaded.c:3706:7: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+ 3706 |       *((u16*) smc_data) = 0;
+      |       ^
+psp-g++ -I. -I/home/dev/pspdev/psp/include -I/home/dev/pspdev/psp/sdk/include -G0 -Wall -O3 -fomit-frame-pointer -ffast-math -march=allegrex -mfp32 -mgp32 -mlong32 -mabi=eabi -falign-functions=32 -falign-loops -falign-labels -falign-jumps -DPSP -DMIPS_ARCH -DHAVE_DYNAREC -DMIPS_HAS_R2_INSTS -DSMALL_TRANSLATION_CACHE -DPSP_STANDALONE -I. -Ipsp -I. -I/home/dev/pspdev/psp/include -I/home/dev/pspdev/psp/sdk/include -G0 -Wall -O3 -fomit-frame-pointer -ffast-math -march=allegrex -mfp32 -mgp32 -mlong32 -mabi=eabi -falign-functions=32 -falign-loops -falign-labels -falign-jumps -DPSP -DMIPS_ARCH -DHAVE_DYNAREC -DMIPS_HAS_R2_INSTS -DSMALL_TRANSLATION_CACHE -DPSP_STANDALONE -I. -Ipsp -fno-rtti -fno-exceptions -std=c++11 -D_PSP_FW_VERSION=500 -c cpu.cc -o cpu.o
+gba_memory.c: In function 'load_gamepak':
+gba_memory.c:2931:60: warning: '%s' directive output may be truncated writing up to 511 bytes into a region of size between 0 and 511 [-Wformat-truncation=]
+ 2931 |    snprintf(backup_filename, sizeof(backup_filename), "%s%c%s", save_path, PATH_SEPARATOR_CHAR, p);
+      |                                                            ^~
+gba_memory.c:2931:4: note: 'snprintf' output between 2 and 1024 bytes into a destination of size 512
+ 2931 |    snprintf(backup_filename, sizeof(backup_filename), "%s%c%s", save_path, PATH_SEPARATOR_CHAR, p);
+      |    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+psp-gcc -I. -I/home/dev/pspdev/psp/include -I/home/dev/pspdev/psp/sdk/include -G0 -Wall -O3 -fomit-frame-pointer -ffast-math -march=allegrex -mfp32 -mgp32 -mlong32 -mabi=eabi -falign-functions=32 -falign-loops -falign-labels -falign-jumps -DPSP -DMIPS_ARCH -DHAVE_DYNAREC -DMIPS_HAS_R2_INSTS -DSMALL_TRANSLATION_CACHE -DPSP_STANDALONE -I. -Ipsp -I. -I/home/dev/pspdev/psp/include -I/home/dev/pspdev/psp/sdk/include -G0 -Wall -O3 -fomit-frame-pointer -ffast-math -march=allegrex -mfp32 -mgp32 -mlong32 -mabi=eabi -falign-functions=32 -falign-loops -falign-labels -falign-jumps -DPSP -DMIPS_ARCH -DHAVE_DYNAREC -DMIPS_HAS_R2_INSTS -DSMALL_TRANSLATION_CACHE -DPSP_STANDALONE -I. -Ipsp   -c -o bios_data.o bios_data.S
+psp-gcc -I. -I/home/dev/pspdev/psp/include -I/home/dev/pspdev/psp/sdk/include -G0 -Wall -O3 -fomit-frame-pointer -ffast-math -march=allegrex -mfp32 -mgp32 -mlong32 -mabi=eabi -falign-functions=32 -falign-loops -falign-labels -falign-jumps -DPSP -DMIPS_ARCH -DHAVE_DYNAREC -DMIPS_HAS_R2_INSTS -DSMALL_TRANSLATION_CACHE -DPSP_STANDALONE -I. -Ipsp -I. -I/home/dev/pspdev/psp/include -I/home/dev/pspdev/psp/sdk/include -G0 -Wall -O3 -fomit-frame-pointer -ffast-math -march=allegrex -mfp32 -mgp32 -mlong32 -mabi=eabi -falign-functions=32 -falign-loops -falign-labels -falign-jumps -DPSP -DMIPS_ARCH -DHAVE_DYNAREC -DMIPS_HAS_R2_INSTS -DSMALL_TRANSLATION_CACHE -DPSP_STANDALONE -I. -Ipsp   -c -o mips/mips_stub.o mips/mips_stub.S
+psp-gcc -I. -I/home/dev/pspdev/psp/include -I/home/dev/pspdev/psp/sdk/include -G0 -Wall -O3 -fomit-frame-pointer -ffast-math -march=allegrex -mfp32 -mgp32 -mlong32 -mabi=eabi -falign-functions=32 -falign-loops -falign-labels -falign-jumps -DPSP -DMIPS_ARCH -DHAVE_DYNAREC -DMIPS_HAS_R2_INSTS -DSMALL_TRANSLATION_CACHE -DPSP_STANDALONE -I. -Ipsp -D_PSP_FW_VERSION=500   -c -o psp/psp_main.o psp/psp_main.c
+psp-gcc -I. -I/home/dev/pspdev/psp/include -I/home/dev/pspdev/psp/sdk/include -G0 -Wall -O3 -fomit-frame-pointer -ffast-math -march=allegrex -mfp32 -mgp32 -mlong32 -mabi=eabi -falign-functions=32 -falign-loops -falign-labels -falign-jumps -DPSP -DMIPS_ARCH -DHAVE_DYNAREC -DMIPS_HAS_R2_INSTS -DSMALL_TRANSLATION_CACHE -DPSP_STANDALONE -I. -Ipsp -D_PSP_FW_VERSION=500   -c -o psp/psp_video.o psp/psp_video.c
+psp-gcc -I. -I/home/dev/pspdev/psp/include -I/home/dev/pspdev/psp/sdk/include -G0 -Wall -O3 -fomit-frame-pointer -ffast-math -march=allegrex -mfp32 -mgp32 -mlong32 -mabi=eabi -falign-functions=32 -falign-loops -falign-labels -falign-jumps -DPSP -DMIPS_ARCH -DHAVE_DYNAREC -DMIPS_HAS_R2_INSTS -DSMALL_TRANSLATION_CACHE -DPSP_STANDALONE -I. -Ipsp -D_PSP_FW_VERSION=500   -c -o psp/psp_audio.o psp/psp_audio.c
+psp/psp_audio.c:27:12: warning: 'audio_thread' defined but not used [-Wunused-function]
+   27 | static int audio_thread(SceSize args, void *argp)
+      |            ^~~~~~~~~~~~
+psp-gcc -I. -I/home/dev/pspdev/psp/include -I/home/dev/pspdev/psp/sdk/include -G0 -Wall -O3 -fomit-frame-pointer -ffast-math -march=allegrex -mfp32 -mgp32 -mlong32 -mabi=eabi -falign-functions=32 -falign-loops -falign-labels -falign-jumps -DPSP -DMIPS_ARCH -DHAVE_DYNAREC -DMIPS_HAS_R2_INSTS -DSMALL_TRANSLATION_CACHE -DPSP_STANDALONE -I. -Ipsp -D_PSP_FW_VERSION=500   -c -o psp/psp_input.o psp/psp_input.c
+psp-gcc -I. -I/home/dev/pspdev/psp/include -I/home/dev/pspdev/psp/sdk/include -G0 -Wall -O3 -fomit-frame-pointer -ffast-math -march=allegrex -mfp32 -mgp32 -mlong32 -mabi=eabi -falign-functions=32 -falign-loops -falign-labels -falign-jumps -DPSP -DMIPS_ARCH -DHAVE_DYNAREC -DMIPS_HAS_R2_INSTS -DSMALL_TRANSLATION_CACHE -DPSP_STANDALONE -I. -Ipsp -D_PSP_FW_VERSION=500   -c -o psp/psp_menu.o psp/psp_menu.c
+psp/psp_menu.c:42:13: warning: 'draw_text' defined but not used [-Wunused-function]
+   42 | static void draw_text(int x, int y, const char *text, u32 color)
+      |             ^~~~~~~~~
+psp/psp_menu.c: In function 'scan_directory.constprop':
+psp/psp_menu.c:94:52: warning: '%s' directive output may be truncated writing up to 255 bytes into a region of size between 0 and 511 [-Wformat-truncation=]
+   94 |         snprintf(full_path, sizeof(full_path), "%s/%s", path, entry->d_name);
+      |                                                    ^~
+psp/psp_menu.c:94:9: note: 'snprintf' output between 2 and 768 bytes into a destination of size 512
+   94 |         snprintf(full_path, sizeof(full_path), "%s/%s", path, entry->d_name);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+psp-gcc -I. -I/home/dev/pspdev/psp/include -I/home/dev/pspdev/psp/sdk/include -G0 -Wall -O3 -fomit-frame-pointer -ffast-math -march=allegrex -mfp32 -mgp32 -mlong32 -mabi=eabi -falign-functions=32 -falign-loops -falign-labels -falign-jumps -DPSP -DMIPS_ARCH -DHAVE_DYNAREC -DMIPS_HAS_R2_INSTS -DSMALL_TRANSLATION_CACHE -DPSP_STANDALONE -I. -Ipsp -D_PSP_FW_VERSION=500   -c -o psp/psp_wrapper.o psp/psp_wrapper.c
+psp/psp_wrapper.c:18:19: warning: 'gamepak_file_handle' defined but not used [-Wunused-variable]
+   18 | static psp_file_t gamepak_file_handle = {NULL, 0};
+      |                   ^~~~~~~~~~~~~~~~~~~
+mksfoex -d MEMSIZE=1  'gpSP GBA Emulator' PARAM.SFO
+psp-gcc -I. -I/home/dev/pspdev/psp/include -I/home/dev/pspdev/psp/sdk/include -G0 -Wall -O3 -fomit-frame-pointer -ffast-math -march=allegrex -mfp32 -mgp32 -mlong32 -mabi=eabi -falign-functions=32 -falign-loops -falign-labels -falign-jumps -DPSP -DMIPS_ARCH -DHAVE_DYNAREC -DMIPS_HAS_R2_INSTS -DSMALL_TRANSLATION_CACHE -DPSP_STANDALONE -I. -Ipsp -D_PSP_FW_VERSION=500  -L. -L/home/dev/pspdev/psp/lib -L/home/dev/pspdev/psp/sdk/lib -specs=/home/dev/pspdev/psp/sdk/lib/prxspecs -Wl,-q,-T/home/dev/pspdev/psp/sdk/lib/linkfile.prx  -Wl,-zmax-page-size=128  gba_memory.o savestate.o input.o sound.o cheats.o memmap.o serial.o gbp.o rfu.o gba_cc_lut.o cpu_threaded.o video.o cpu.o bios_data.o mips/mips_stub.o psp/psp_main.o psp/psp_video.o psp/psp_audio.o psp/psp_input.o psp/psp_menu.o psp/psp_wrapper.o /home/dev/pspdev/psp/sdk/lib/prxexports.o -lpspdebug -lpspgu -lpspctrl -lpspaudio -lpsppower -lm -lpspdebug -lpspdisplay -lpspge -lpspctrl -lpspnet -lpspnet_apctl -o gpsp.elf
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: cpu_threaded.o: in function `flush_translation_cache_ram':
+(.text+0x3780): undefined reference to `flush_ram_count'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3784): undefined reference to `flush_ram_count'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x37a4): undefined reference to `flush_ram_count'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: cpu_threaded.o: in function `translate_block_arm':
+(.text+0x3a9c): undefined reference to `translation_gate_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3ab4): undefined reference to `translation_gate_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3c20): undefined reference to `translation_gate_targets'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3c2c): undefined reference to `translation_gate_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x4508): undefined reference to `idle_loop_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: cpu_threaded.o: in function `translate_block_thumb':
+(.text+0x3f594): undefined reference to `idle_loop_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3edc0): undefined reference to `idle_loop_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3ecd4): undefined reference to `idle_loop_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: cpu_threaded.o: in function `translate_block_arm':
+(.text+0x5408): undefined reference to `idle_loop_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: cpu_threaded.o:(.text+0x450c): more undefined references to `idle_loop_target_pc' follow
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: cpu_threaded.o: in function `translate_block_arm':
+(.text+0x4b34): undefined reference to `translation_gate_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x4b40): undefined reference to `translation_gate_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x4c70): undefined reference to `translation_gate_targets'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x4afc): undefined reference to `translation_gate_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x4c80): undefined reference to `translation_gate_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x542c): undefined reference to `idle_loop_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x5430): undefined reference to `idle_loop_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: cpu_threaded.o: in function `translate_block_thumb':
+(.text+0x52308): undefined reference to `idle_loop_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: cpu_threaded.o: in function `translate_block_arm':
+(.text+0x18a80): undefined reference to `idle_loop_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x18a9c): undefined reference to `idle_loop_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: cpu_threaded.o:(.text+0x18aa0): more undefined references to `idle_loop_target_pc' follow
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: cpu_threaded.o: in function `translate_block_thumb':
+(.text+0x3d004): undefined reference to `translation_gate_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3d010): undefined reference to `translation_gate_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3d120): undefined reference to `translation_gate_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3d130): undefined reference to `translation_gate_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3d200): undefined reference to `translation_gate_targets'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3cfc4): undefined reference to `translation_gate_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3d214): undefined reference to `translation_gate_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: cpu_threaded.o: in function `translate_block_arm':
+(.text+0x3a98): undefined reference to `translation_gate_targets'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: cpu_threaded.o: in function `translate_block_thumb':
+(.text+0x3dd54): undefined reference to `translation_gate_targets'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3d0f4): undefined reference to `translation_gate_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3dd68): undefined reference to `translation_gate_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3ecf0): undefined reference to `idle_loop_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3ecf4): undefined reference to `idle_loop_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3ede4): undefined reference to `idle_loop_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3ede8): undefined reference to `idle_loop_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3f5b8): undefined reference to `idle_loop_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: cpu_threaded.o:(.text+0x3f5bc): more undefined references to `idle_loop_target_pc' follow
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: cpu_threaded.o: in function `flush_dynarec_caches':
+(.text+0x684c0): undefined reference to `flush_ram_count'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x684c4): undefined reference to `flush_ram_count'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x684d4): undefined reference to `flush_ram_count'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: cpu_threaded.o: in function `partial_flush_ram_full':
+(.text+0x6866c): undefined reference to `translation_gate_targets'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x68670): undefined reference to `translation_gate_targets'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x68684): undefined reference to `translation_gate_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x68694): undefined reference to `translation_gate_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: cpu_threaded.o: in function `translate_block_arm':
+(.text+0x4b20): undefined reference to `translation_gate_targets'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: cpu_threaded.o: in function `partial_flush_ram_full':
+(.text+0x68774): undefined reference to `translation_gate_targets'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: cpu_threaded.o: in function `translate_block_thumb':
+(.text+0x3cff0): undefined reference to `translation_gate_targets'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: cpu_threaded.o: in function `partial_flush_ram_full':
+(.text+0x6877c): undefined reference to `translation_gate_targets'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x68780): undefined reference to `translation_gate_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x68784): undefined reference to `translation_gate_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: cpu_threaded.o: in function `translate_block_thumb':
+(.text+0x3d10c): undefined reference to `translation_gate_targets'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: cpu_threaded.o: in function `partial_flush_ram_full':
+(.text+0x68790): undefined reference to `translation_gate_targets'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: gba_memory.o: in function `trigger_timer':
+gba_memory.c:(.text+0x8): undefined reference to `timer'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: gba_memory.c:(.text+0x10): undefined reference to `timer'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: gba_memory.c:(.text+0x74): undefined reference to `execute_cycles'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: gba_memory.c:(.text+0x78): undefined reference to `execute_cycles'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: gba_memory.c:(.text+0xbc): undefined reference to `execute_cycles'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: gba_memory.c:(.text+0xec): undefined reference to `cpu_ticks'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: gba_memory.c:(.text+0xf0): undefined reference to `cpu_ticks'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: gba_memory.o: in function `write_io_register16':
+(.text+0x3b2c): undefined reference to `timer'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3b30): undefined reference to `timer'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3bd0): undefined reference to `timer'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3bd4): undefined reference to `timer'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3d38): undefined reference to `timer'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: gba_memory.o:(.text+0x3d3c): more undefined references to `timer' follow
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: gba_memory.o: in function `write_io_register16':
+(.text+0x3d70): undefined reference to `execute_cycles'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3d74): undefined reference to `execute_cycles'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3db0): undefined reference to `execute_cycles'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3e2c): undefined reference to `timer'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3e54): undefined reference to `timer'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3fb8): undefined reference to `timer'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3fbc): undefined reference to `timer'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3ff0): undefined reference to `execute_cycles'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x3ff4): undefined reference to `execute_cycles'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x4030): undefined reference to `execute_cycles'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x4044): undefined reference to `timer'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x404c): undefined reference to `timer'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x4058): undefined reference to `timer'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x4060): undefined reference to `timer'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: gba_memory.o: in function `load_gamepak':
+(.text+0xbc50): undefined reference to `idle_loop_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0xbc78): undefined reference to `translation_gate_targets'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0xbc34): undefined reference to `translation_gate_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0xbc8c): undefined reference to `translation_gate_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0xbbe4): undefined reference to `idle_loop_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0xbd0c): undefined reference to `idle_loop_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0xbd40): undefined reference to `translation_gate_targets'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0xbd54): undefined reference to `translation_gate_targets'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0xbd64): undefined reference to `translation_gate_targets'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0xbd78): undefined reference to `translation_gate_targets'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0xbd88): undefined reference to `translation_gate_targets'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: gba_memory.o:(.text+0xbc30): more undefined references to `translation_gate_targets' follow
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: savestate.o: in function `gba_load_state':
+(.text+0x534): undefined reference to `main_check_savestate'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x584): undefined reference to `main_read_savestate'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: savestate.o: in function `gba_save_state':
+(.text+0x734): undefined reference to `main_write_savestate'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: input.o: in function `update_input':
+(.text+0x1e0): undefined reference to `set_fastforward_override'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x2d0): undefined reference to `frame_counter'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x178): undefined reference to `frame_counter'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x2d4): undefined reference to `frame_counter'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: sound.o: in function `render_gbc_sound':
+(.text+0x364): undefined reference to `cpu_ticks'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x378): undefined reference to `cpu_ticks'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x40c): undefined reference to `gbc_update_count'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x418): undefined reference to `gbc_update_count'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x44c): undefined reference to `gbc_update_count'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: rfu.o: in function `rfu_process_command':
+rfu.c:(.text+0xf4): undefined reference to `rand_gen'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: rfu.c:(.text+0x65c): undefined reference to `rand_gen'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: rfu.o: in function `rfu_reset':
+(.text+0xf40): undefined reference to `rand_seed'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0xf48): undefined reference to `cpu_ticks'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0xf50): undefined reference to `cpu_ticks'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0xf54): undefined reference to `rand_seed'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: rfu.o: in function `rfu_net_receive':
+(.text+0x1694): undefined reference to `rand_gen'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: video.o: in function `update_scanline':
+(.text+0x24a80): undefined reference to `skip_next_frame'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x24a84): undefined reference to `skip_next_frame'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: cpu.o: in function `execute_arm':
+(.text+0x564): undefined reference to `idle_loop_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x464): undefined reference to `idle_loop_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x614): undefined reference to `idle_loop_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x680): undefined reference to `update_gba'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x69c): undefined reference to `update_gba'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x6d4): undefined reference to `idle_loop_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x96c): undefined reference to `idle_loop_target_pc'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: mips/mips_stub.o: in function `mips_update_gba':
+(.text+0x64): undefined reference to `update_gba'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: mips/mips_stub.o: in function `cpu_sleep_loop':
+(.text+0x378): undefined reference to `update_gba'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: mips/mips_stub.o: in function `fnptrs':
+(.data+0x955c): undefined reference to `update_gba'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: psp/psp_main.o: in function `load_rom':
+(.text+0x26c): undefined reference to `reset_gba'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: psp/psp_main.o: in function `run_emulation':
+(.text+0x370): undefined reference to `execute_cycles'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x378): undefined reference to `skip_next_frame'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x384): undefined reference to `skip_next_frame'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x358): undefined reference to `execute_cycles'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x40c): undefined reference to `execute_cycles'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x414): undefined reference to `skip_next_frame'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x354): undefined reference to `skip_next_frame'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: (.text+0x430): undefined reference to `skip_next_frame'
+/home/dev/pspdev/bin/../lib/gcc/psp/15.1.1/../../../../psp/bin/ld: psp/psp_wrapper.o: in function `load_gamepak_psp':
+(.text+0x270): undefined reference to `load_gamepak_raw'
+collect2: error: ld returned 1 exit status
+make: *** [/home/dev/pspdev/psp/sdk/lib/build.mak:162: gpsp.elf] Error 1

@@ -1,0 +1,58 @@
+# gpSP Standalone PSP Makefile
+# Uses PSPSDK build system
+
+TARGET = gpsp-temp
+PSP_EBOOT_TITLE = gpSP-temp GBA Emulator
+
+# Set PSPSDK path - use psp-config or fallback to /home/datafrog/pspdev
+PSPSDK ?= $(shell psp-config --pspsdk-path 2>/dev/null || echo /home/datafrog/pspdev/psp/sdk)
+
+# Compiler flags
+CFLAGS = -G0 -Wall -O3 -fomit-frame-pointer -ffast-math
+CFLAGS += -march=allegrex -mfp32 -mgp32 -mlong32 -mabi=eabi
+CFLAGS += -falign-functions=32 -falign-loops -falign-labels -falign-jumps
+CFLAGS += -DPSP -DMIPS_ARCH -DHAVE_DYNAREC -DMIPS_HAS_R2_INSTS
+CFLAGS += -DSMALL_TRANSLATION_CACHE -DPSP_STANDALONE
+CFLAGS += -DGBA_SOUND_FREQUENCY=48000
+CFLAGS += -I. -Ipsp
+
+CXXFLAGS = $(CFLAGS) -fno-rtti -fno-exceptions -std=c++11
+ASFLAGS = $(CFLAGS)
+
+# Core source files (excluding main.c - we use psp/psp_main.c instead)
+# Note: We use psp/gba_memory.c instead of root gba_memory.c for PSP-specific changes
+OBJS = psp/gba_memory.o savestate.o input.o sound.o cheats.o memmap.o \
+       serial.o gbp.o rfu.o gba_cc_lut.o cpu_threaded.o \
+       video.o cpu.o bios_data.o mips/mips_stub.o \
+       psp/psp_main.o psp/psp_video.o psp/psp_audio.o \
+       psp/psp_input.o psp/psp_menu.o psp/psp_wrapper.o psp/psp_config.o
+
+# PSP libraries - minimal set
+LIBS = -lpspdebug -lpspgu -lpspctrl -lpspaudio -lpsppower -lm
+
+# PSP build settings
+BUILD_PRX = 1
+PSP_FW_VERSION = 500
+PSP_LARGE_MEMORY = 1
+
+# EBOOT settings
+EXTRA_TARGETS = EBOOT.PBP
+PSP_EBOOT_ICON = ICON0.PNG
+
+# Custom build rules for special files
+EXTRA_CLEAN = $(OBJS)
+
+# Include PSPSDK's standard build system
+# This handles all the complex linking and EBOOT.PBP creation
+include $(PSPSDK)/lib/build.mak
+
+# Special compilation rule for cpu_threaded.c (placed after include)
+cpu_threaded.o: cpu_threaded.c
+	$(CC) $(CFLAGS) -Wno-unused-variable -Wno-unused-label -c $< -o $@
+
+# C++ compilation rules (placed after include)
+video.o: video.cc
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+cpu.o: cpu.cc
+	$(CXX) $(CXXFLAGS) -c $< -o $@
