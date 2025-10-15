@@ -131,11 +131,6 @@ void psp_video_render(u16 *gba_pixels)
     
     sceGuStart(GU_DIRECT, display_list);
     
-    // Clear screen to black
-    sceGuClearColor(0xFF000000);
-    sceGuClearDepth(0);
-    sceGuClear(GU_COLOR_BUFFER_BIT | GU_DEPTH_BUFFER_BIT);
-    
     // Disable depth test for 2D rendering
     sceGuDisable(GU_DEPTH_TEST);
     
@@ -213,4 +208,5 @@ void psp_video_flip(void)
     frame_buffer[current_buffer] = sceGuSwapBuffers();
     current_buffer ^= 1;
 }
+
 
